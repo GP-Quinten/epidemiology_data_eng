@@ -1,0 +1,4 @@
+time_dim: 'weekly'
+size_FW_daily: 7
+size_FW_weekly: 5 
+numeric_cols: []

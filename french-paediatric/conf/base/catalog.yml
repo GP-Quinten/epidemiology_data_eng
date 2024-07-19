@@ -1,0 +1,35 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+
+
+paediatric_source:
+  type: paediatric_data_processing.extras.datasets.sftp_dataset.SFTPCSVDataSet
+  filepath: ${globals:PEDIATRIC_DATA_PATH}/
+  credentials : cgm_credentials 
+  load_args:
+    sep: ";"
+    encoding: utf-8
+    quotechar: '"'
+  save_args: 
+      sep: ";"
+      encoding: utf-8
+      quotechar: '"'
+
+paediatric_extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/paediatric.csv
+  load_args:
+    sep: ","
+    encoding: utf-8
+    quotechar: '"'
+    header: [1, 2]
+
+paediatric_export:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/paediatric_processed.csv
+
+paediatric_local:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/preprocessed_paediatric.csv

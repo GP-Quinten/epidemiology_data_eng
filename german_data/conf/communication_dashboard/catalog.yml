@@ -1,0 +1,1005 @@
+#####################################################################################################
+#####################################################################################################
+
+
+
+#############################################################
+########################## CGM PHARMA #######################
+
+## SOURCES ##
+diagnoses_cgm_past.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:GP_DATA_PATH}/CGM_diagnoses_extract_2023-01_2024-11.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ","
+      encoding: latin1
+      quotechar: '"'
+
+diagnoses_cgm_latest_weeks.source:
+  type: gp_germany.extras.datasets.dynamic_excel_diag.SFTPExcelLoader 
+  filepath: ${globals:GP_DATA_PATH}/
+  credentials : cgm_credentials
+  load_args:
+      sep: ","
+      encoding: latin1
+      quotechar: '"'
+
+prescriptions_cgm_past.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:GP_DATA_PATH}/CGM_prescriptions_extract_2023-01_2024-07.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ","
+      encoding: latin1
+      quotechar: '"'
+
+prescriptions_cgm_latest_weeks.source:
+  type: gp_germany.extras.datasets.dynamic_excel_diag.SFTPExcelLoader 
+  filepath: ${globals:GP_DATA_PATH}/
+  credentials : cgm_credentials
+  load_args:
+      sep: ","
+      encoding: latin1
+      quotechar: '"'
+
+pharmacy_data_germany.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:PHARMACY_DATA_PATH}/pharmacy_data_germany_2019_April2024_quinten_concat.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ";"
+      encoding: latin1
+      quotechar: '"'
+
+pharmacy_data_germany_all_sales.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:PHARMACY_DATA_PATH}/pharmacy_data_germany_all_sales_2019_April2014_quinten_concat.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ";"
+      encoding: latin1
+      quotechar: '"'
+
+## EXTRACTS ##
+diagnoses_cgm.extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/CGM_diagnoses_extract.csv
+
+prescriptions_cgm.extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/CGM_prescriptions_extract.csv
+
+pharmacy_data_germany.extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/pharmacy_data_germany_extract.csv
+
+pharmacy_data_germany_all_sales.extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/pharmacy_data_germany_all_sales_extract.csv
+  
+## INTERMEDIATE DATA ##
+German_GP_Diagnoses:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/diagnoses/Diagnoses.csv
+
+German_GP_Prescriptions:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/prescriptions/Prescriptions.csv
+
+German_Pharmacy_Sales:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/pharmacy/Pharmacy_Sales.csv
+
+German_GP_Diagnoses_rel:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/diagnoses/Diagnoses_rel.csv
+
+German_GP_Prescriptions_rel:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/prescriptions/Prescriptions_rel.csv
+
+German_Pharmacy_Sales_rel:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/pharmacy/Pharmacy_Sales_rel.csv
+
+German_GP_Diagnoses_ratio_all:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/diagnoses/Diagnoses_ratio_all.csv
+
+German_GP_Prescriptions_ratio_all:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/prescriptions/Prescriptions_ratio_all.csv
+
+German_Pharmacy_Sales_ratio_all:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/pharmacy/Pharmacy_Sales_ratio_all.csv
+
+German_GP_Diagnoses_count_all:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/diagnoses/Diagnoses_count_all.csv
+
+German_GP_Prescriptions_count_all:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/prescriptions/Prescriptions_count_all.csv
+
+German_Pharmacy_Sales_count_all:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/pharmacy/Pharmacy_Sales_count_all.csv
+
+German_GP_Diagnoses_counts_for_trends:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/diagnoses/Diagnoses_counts_for_trends.csv
+
+German_GP_Prescriptions_counts_for_trends:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/prescriptions/Prescriptions_counts_for_trends.csv
+
+
+## PREPROCESSING OUTPUT ##
+processed_German_GP_Diagnoses_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_GP_Prescriptions_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_Pharmacy_Sales_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_GP_Diagnoses_rel_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_rel.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_GP_Prescriptions_rel_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_rel.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_Pharmacy_Sales_rel_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales_rel.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_GP_Diagnoses_count_all_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_count_all.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_GP_Prescriptions_count_all_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_count_all.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_Pharmacy_Sales_count_all_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_GP_Pharmacy_Sales_count_all.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_GP_Diagnoses_ratio_all_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_ratio_all.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_GP_Prescriptions_ratio_all_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_ratio_all.csv
+  credentials : communication_dashboard_credentials
+
+processed_German_Pharmacy_Sales_ratio_all_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales_ratio_all.csv
+  credentials : communication_dashboard_credentials
+
+
+#### LOCAL QUINTEN ALERTS ####
+German_GP_Diagnoses_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/diagnoses/quinten_alerts/German_GP_Diagnoses_alerts_quinten.csv
+
+German_GP_Prescriptions_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/prescriptions/quinten_alerts/German_GP_Prescriptions_alerts_quinten.csv
+
+German_Pharmacy_Sales_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/pharmacy/quinten_alerts/German_Pharmacy_Sales_alerts_quinten.csv
+
+German_GP_Diagnoses_rel_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/diagnoses/quinten_alerts/German_GP_Diagnoses_rel_alerts_quinten.csv
+
+German_GP_Prescriptions_rel_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/prescriptions/quinten_alerts/German_GP_Prescriptions_rel_alerts_quinten.csv
+
+German_Pharmacy_Sales_rel_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/pharmacy/quinten_alerts/German_Pharmacy_Sales_rel_alerts_quinten.csv
+
+German_GP_Diagnoses_ratio_all_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/diagnoses/quinten_alerts/German_GP_Diagnoses_ratio_all_alerts_quinten.csv
+
+German_GP_Prescriptions_ratio_all_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/prescriptions/quinten_alerts/German_GP_Prescriptions_ratio_all_alerts_quinten.csv
+
+German_Pharmacy_Sales_ratio_all_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/pharmacy/quinten_alerts/German_Pharmacy_Sales_ratio_all_alerts_quinten.csv
+
+## UPLOAD quinten alerts ##
+German_GP_Diagnoses_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_alerts_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+German_GP_Prescriptions_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_alerts_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+German_Pharmacy_Sales_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales_alerts_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+German_GP_Diagnoses_rel_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_rel_alerts_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+German_GP_Prescriptions_rel_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_rel_alerts_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+German_Pharmacy_Sales_rel_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales_rel_alerts_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+German_GP_Diagnoses_ratio_all_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_ratio_all_alerts_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+German_GP_Prescriptions_ratio_all_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_ratio_all_alerts_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+German_Pharmacy_Sales_ratio_all_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales_ratio_all_alerts_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+## ALERTS OUPUTS ##
+German_GP_Alert_Diagnoses_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_Alert.csv
+  credentials : communication_dashboard_credentials
+
+German_GP_Alert_Prescriptions_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_Alert.csv
+  credentials : communication_dashboard_credentials
+
+German_Pharmacy_Alert_Sales_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales_Alert.csv
+  credentials : communication_dashboard_credentials
+
+# German_GP_Alert_Diagnoses_rel_MongoDB:
+#   type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+#   filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_rel_Alert.csv
+#   credentials : communication_dashboard_credentials
+
+# German_GP_Alert_Prescriptions_rel_MongoDB:
+#   type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+#   filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_rel_Alert.csv
+#   credentials : communication_dashboard_credentials
+
+German_Pharmacy_Alert_Sales_rel_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales_rel_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+## Forecast OUPUTS ##
+German_GP_Forecast_Diagnoses_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+German_GP_Forecast_Prescriptions_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+German_Pharmacy_Forecast_Sales_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+# German_GP_Forecast_Diagnoses_rel_MongoDB:
+#   type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+#   filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Diagnoses_rel_Forecast.csv
+#   credentials : communication_dashboard_credentials
+
+# German_GP_Forecast_Prescriptions_rel_MongoDB:
+#   type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+#   filepath: ${globals:COMMUNICATION_DASHBOARD}/German_GP/German_GP_Prescriptions_rel_Forecast.csv
+#   credentials : communication_dashboard_credentials
+
+German_Pharmacy_Forecast_Sales_rel_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/German_Pharmacy/German_Pharmacy_Sales_rel_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+
+
+
+
+#####################################################################################################
+#####################################################################################################
+
+
+
+###################################################
+##################### COVID #######################
+
+## SOURCES ## 
+RKI_full_data.source:
+  type: pandas.CSVDataSet
+  filepath: https://media.githubusercontent.com/media/robert-koch-institut/SARS-CoV-2-Infektionen_in_Deutschland/main/Aktuell_Deutschland_SarsCov2_Infektionen.csv
+  
+Hospitalization_ger.source:
+  type: pandas.CSVDataSet
+  filepath: https://raw.githubusercontent.com/robert-koch-institut/COVID-19-Hospitalisierungen_in_Deutschland/master/Aktuell_Deutschland_COVID-19-Hospitalisierungen.csv
+
+## EXTRACTS ##
+RKI_full_data.extract:
+   type: pandas.CSVDataSet
+   filepath: data/01_raw/RKI_full_data_covid.csv
+
+Hospitalization_ger.extract:
+   type: pandas.CSVDataSet
+   filepath: data/01_raw/Hospitalization_covid_ger.csv
+
+## INTERMEDIATE DATA ## 
+COVID_cases:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/covid/COVID_cases.csv
+
+COVID_deaths:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/covid/COVID_deaths.csv
+
+COVID_hosp:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/covid/COVID_hosp.csv
+
+COVID_cases_weekly:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/covid/COVID_cases_weekly.csv
+
+COVID_deaths_weekly:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/covid/COVID_deaths_weekly.csv
+
+COVID_hosp_weekly:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/covid/COVID_hosp_weekly.csv
+
+# LOCAL quinten alerts save #
+COVID_cases_alerts_Quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/covid/COVID_cases_alerts_Quinten.csv
+
+COVID_deaths_alerts_Quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/covid/COVID_deaths_alerts_Quinten.csv
+
+COVID_hosp_alerts_Quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/covid/COVID_hosp_alerts_Quinten.csv
+
+## PREPROCESSING OUTPUT ##
+COVID_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_cases.csv
+  credentials : communication_dashboard_credentials
+
+COVID_deaths_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_deaths.csv
+  credentials : communication_dashboard_credentials
+
+COVID_hosp_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_hosp.csv
+  credentials : communication_dashboard_credentials
+
+
+## ALERTS OUTPUTS ##
+Alert_COVID_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_cases_Alert.csv
+  credentials : communication_dashboard_credentials
+
+Alert_COVID_deaths_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_deaths_Alert.csv
+  credentials : communication_dashboard_credentials
+
+Alert_COVID_hosp_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_hosp_Alert.csv
+  credentials : communication_dashboard_credentials
+
+## QUinten ALERTS OUTPUTS ##
+COVID_cases_alerts_Quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_cases_Alert_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+COVID_deaths_alerts_Quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_deaths_Alert_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+COVID_hosp_alerts_Quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_hosp_Alert_Quinten.csv
+  credentials : communication_dashboard_credentials
+
+## FORECAST OUPUTS ##
+Forecast_COVID_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_cases_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+Forecast_COVID_deaths_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_deaths_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+Forecast_COVID_hosp_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/COVID_hosp_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+
+
+
+#####################################################################################################
+#####################################################################################################
+
+
+###################################################
+###################### GOOGLE #####################
+
+## SOURCES ##
+
+## EXTRACTS ##
+symptoms:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/resp_symptoms.csv
+
+## INTERMEDIATE DATA ##
+Google_symptoms_fr:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/google/Google_symptoms_fr.csv
+
+Google_symptoms_de:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/google/Google_symptoms_de.csv
+
+## DATA with ALERTS ##
+Google_symptoms_fr_alerts:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/google/Google_symptoms_fr_alerts.csv
+
+Google_symptoms_de_alerts:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/google/Google_symptoms_de_alerts.csv
+
+## PREPROCESSING OUTPUT ##
+Google_symptoms_fr_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Google_trends/Google_symptoms_fr.csv
+  credentials : communication_dashboard_credentials
+
+Google_symptoms_de_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Google_trends/Google_symptoms_de.csv
+  credentials : communication_dashboard_credentials
+
+## ALERTS OUPUTS ##
+Alert_Google_symptoms_fr_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Google_trends/Google_Alert_FR.csv
+  credentials : communication_dashboard_credentials
+
+Alert_Google_symptoms_de_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Google_trends/Google_Alert_DE.csv
+  credentials : communication_dashboard_credentials
+
+## QUINTEN ALERTS OUTPUTS ##
+Google_symptoms_fr_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Google_trends/Google_Alert_Quinten_FR.csv
+  credentials : communication_dashboard_credentials
+
+Google_symptoms_de_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Google_trends/Google_Alert_Quinten_DE.csv
+  credentials : communication_dashboard_credentials
+
+## FORECAST OUPUTS ##
+Forecast_Google_symptoms_fr_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Google_trends/Google_Forecast_FR.csv
+  credentials : communication_dashboard_credentials
+
+Forecast_Google_symptoms_de_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Google_trends/Google_Forecast_DE.csv
+  credentials : communication_dashboard_credentials
+
+
+#####################################################################################################
+#####################################################################################################
+
+
+
+#################################################
+###################### INFLUENZA ################
+
+## SOURCES ##
+
+## EXTRACTS ##
+Influenza_cases_BB:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_BB.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_BE:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_BE.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_BW:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_BW.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_BY:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_BY.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_DE:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_DE.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_HB:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_HB.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_HE:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_HE.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_HH:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_HH.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_MV:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_MV.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_NI:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_NI.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_NW:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_NW.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_RP:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_RP.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_SH:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_SH.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_SL:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_SL.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_SN:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_SN.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_ST:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_ST.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_TH:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_TH.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+## INTERMEDIATE DATA ## 
+
+Influenza_cases:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/influenza/influenza_cases.csv
+
+## PREPROCESSING OUTPUT ##
+Influenza_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/Influenza_cases.csv
+  credentials : communication_dashboard_credentials
+
+## ALERTS OUPUTS ##
+Alert_Influenza_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/Influenza_cases_Alert.csv
+  credentials : communication_dashboard_credentials
+
+## FORECAST OUPUTS ##
+Forecast_Influenza_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/Influenza_cases_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+
+#####################################################################################################
+#####################################################################################################
+
+
+
+#################################################
+#################### RSV ########################
+
+## SOURCES ##
+
+## EXTRACTS ##
+RSV_cases_SN:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/RSV_cases_SN.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+## INTERMEDIATE DATA ## 
+RSV_cases:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/RSV/RSV_cases.csv
+
+## PREPROCESSING OUTPUTS ##
+RSV_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/RSV_cases.csv
+  credentials : communication_dashboard_credentials
+
+## ALERTS OUTPUTS ##
+Alert_RSV_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/RSV_cases_Alert.csv
+  credentials : communication_dashboard_credentials
+
+
+## FORECAST OUTPUTS ##
+Forecast_RSV_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/RSV_cases_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+
+
+#####################################################################################################
+#####################################################################################################
+
+
+#################################################
+################## SARI HOSPIT ##################
+
+## SOURCES ## 
+SARI_hospit.source:
+  type: pandas.CSVDataSet
+  filepath: https://raw.githubusercontent.com/robert-koch-institut/SARI-Hospitalisierungsinzidenz/main/SARI-Hospitalisierungsinzidenz.tsv
+
+## EXTRACTS ##
+SARI_hospit.extract:
+   type: pandas.CSVDataSet
+   filepath: data/01_raw/SARI-Hospit_extract.csv
+   load_args:
+    sep: '\t'
+
+## INTERMEDIATE DATA ##
+SARI_hospit_preprocessed:
+   type: pandas.CSVDataSet
+   filepath: data/02_intermediate/SARI/SARI_hospit_preprocessed.csv
+
+SARI_hospit_alerts_quinten:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/SARI/SARI_hospit_alerts_quinten.csv
+
+
+## PREPROCESSING OUTPUT ##
+SARI_hospit_preprocessed_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/SARI_hospit_preprocessed.csv
+  credentials : communication_dashboard_credentials
+
+## QUINTEN ALERTS OUTPUT ##
+SARI_hospit_alerts_quinten_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/SARI_hospit_alerts_quinten.csv
+  credentials : communication_dashboard_credentials
+
+
+## ALERTS OUTPUTS ##
+Alert_SARI_hospit_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/SARI_hospit_Alert.csv
+  credentials : communication_dashboard_credentials
+
+## FORECAST OUTPUTS ##
+Forecast_SARI_hospit_cases_MongoDB:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/RKI_DATA/SARI_hospit_Forecast.csv
+  credentials : communication_dashboard_credentials
+
+#####################################################################################################
+#####################################################################################################
+
+######################################
+#### ADDITIONAL LOCAL OUTPUT SAVE ####
+
+## ALERTS ##
+German_GP_Alert_Diagnoses:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/German_GP_Alert_Diagnoses.csv
+
+German_GP_Alert_Prescriptions:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/German_GP_Alert_Prescriptions.csv
+
+German_Pharmacy_Alert_Sales:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/German_Pharmacy_Alert_Sales.csv
+
+German_GP_Alert_Sales_rel:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/German_GP_Alert_Diagnoses_rel.csv
+
+Alert_Google_symptoms_fr:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_Google_symptoms_fr.csv
+
+Alert_Google_symptoms_de:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_Google_symptoms_de.csv
+
+Alert_COVID_cases:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_COVID_cases.csv
+
+Alert_COVID_deaths:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_COVID_deaths.csv
+
+Alert_COVID_hosp:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_COVID_hosp.csv
+
+Alert_Influenza_cases:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_Influenza_cases.csv
+
+Alert_RSV_cases:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_RSV_cases.csv
+
+Alert_SARI_hospit:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_SARI_hospit.csv
+
+## FORECAST ##
+
+German_GP_Forecast_Diagnoses:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/German_GP_Forecast_Diagnoses.csv
+
+German_GP_Forecast_Prescriptions:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/German_GP_Forecast_Prescriptions.csv
+
+German_Pharmacy_Forecast_Sales:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/German_Pharmacy_Forecast_Sales.csv
+
+German_GP_Forecast_Sales_rel:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/German_GP_Forecast_Diagnoses_rel.csv
+
+Forecast_Google_symptoms_fr:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/Forecast_Google_symptoms_fr.csv
+
+Forecast_Google_symptoms_de:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/Forecast_Google_symptoms_de.csv
+
+Forecast_COVID_cases:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/Forecast_COVID_cases.csv
+
+Forecast_COVID_deaths:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/Forecast_COVID_deaths.csv
+
+Forecast_COVID_hosp:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/Forecast_COVID_hosp.csv
+
+Forecast_Influenza_cases:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/Forecast_Influenza_cases.csv
+
+Forecast_RSV_cases:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/Forecast_RSV_cases.csv
+
+Forecast_SARI_hospit:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/Forecast/Forecast_SARI_hospit.csv

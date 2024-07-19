@@ -1,0 +1,50 @@
+test_pharmacy_data_germany_all_sales.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:PHARMACY_DATA_PATH}/test_pharmacy_data_germany_all_sales.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ";"
+      encoding: latin1
+      quotechar: '"'
+
+test_pharmacy_data_germany_agreggated.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:PHARMACY_DATA_PATH}/test_pharmacy_data_germany_agreggated_corrected.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ";"
+      encoding: latin1
+      quotechar: '"'
+
+test_pharmacy_data_germany_all_sales.extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/test_pharmacy_data_germany_all_sales.csv
+
+test_pharmacy_data_germany_agreggated.extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/test_pharmacy_data_germany_agreggated_corrected.csv
+  
+German_GP_Diagnoses:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Diagnoses.csv
+
+German_GP_Prescriptions:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Prescriptions.csv
+
+German_Pharmacy_Sales:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Pharmacy_Sales.csv
+
+processed_German_GP_Diagnoses:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/Diagnoses.csv
+
+processed_German_GP_Prescriptions:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/Prescriptions.csv
+
+processed_German_Pharmacy_Sales:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/Pharmacy_Sales.csv
+

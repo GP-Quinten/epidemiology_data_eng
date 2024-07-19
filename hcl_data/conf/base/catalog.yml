@@ -1,0 +1,122 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+
+###############
+#### PATHS ####
+
+HCL_data:
+  type: hcl_model_project.extras.datasets.dynamic_excel.SFTPExcelLoader
+  filepath: ${globals:HCL_DATA_PATH}/
+  credentials: cgm_credentials
+
+HCL_update_SEM:
+  type: hcl_model_project.extras.datasets.dynamic_excel_rss_update_SEM.SFTPExcelLoader
+  filepath: ${globals:HCL_DATA_PATH}/
+  credentials: cgm_credentials
+
+HCL_ER_historical:
+  type: hcl_model_project.extras.datasets.dynamic_excel_ER.SFTPExcelLoader
+  filepath: ${globals:HCL_DATA_PATH}/
+  credentials: cgm_credentials
+
+######### SAVING FINAL OUTPUTS LOCALLY ##########
+
+hcl_lab_baseline_final.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/hcl_lab_baseline_final.csv
+  load_args:
+    sep: ';' 
+
+hcl_lab_fraction_final.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/hcl_lab_fraction_final.csv
+  load_args:
+    sep: ';' 
+
+table_I_final.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/table_I_final.csv
+  load_args:
+    sep: ';' 
+
+table_II_final.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/table_II_final.csv
+  load_args:
+    sep: ';' 
+
+table_III_final.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/table_III_final.csv
+  load_args:
+    sep: ';' 
+
+HCL_ER_final.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/HCL_ER_final.csv
+  load_args:
+    sep: ';' 
+
+## Other local saves ##
+
+extract_HCL_ER_historical:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/extract_HCL_ER_historical.csv
+
+# Translated data #
+df_number_of_id_translate:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/translated/df_number_of_id_translate.csv
+
+df_death_translate:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/translated/df_death_translate.csv
+
+df_critical_health_translate:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/translated/df_critical_health_translate.csv
+
+# data with new categories #
+df_table_I_newcat:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/with_new_categories/df_table_I_newcat.csv
+
+df_table_II_newcat:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/with_new_categories/df_table_II_newcat.csv
+
+df_table_III_newcat:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/with_new_categories/df_table_III_newcat.csv
+
+# preprocessed tables #
+table_I:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/table_I.csv
+
+table_II:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/table_II.csv
+
+table_III:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/table_III.csv
+
+HCL_ER_historical_missing_data:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/HCL_ER_historical_missing_data.csv
+
+HCL_ER_historical_smooth:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/HCL_ER_historical_smooth.csv
+
+HCL_ER_historical_baseline:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/HCL_ER_historical_baseline.csv

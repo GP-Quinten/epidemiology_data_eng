@@ -1,0 +1,5 @@
+week: 0 # integer giving the periodicity (number of periods in season), often it is 52 for weekly data or 12 for monthly data.
+steps: 2 # Number of forecast weeks
+p_q_max: 2
+d_value: 1
+D_value: 1

@@ -1,0 +1,86 @@
+test_pharmacy_data_germany_all_sales.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:PHARMACY_DATA_PATH}/test_pharmacy_data_germany_all_sales.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ";"
+      encoding: latin1
+      quotechar: '"'
+
+test_pharmacy_data_germany_agreggated.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:PHARMACY_DATA_PATH}/test_pharmacy_data_germany_agreggated_corrected.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ";"
+      encoding: latin1
+      quotechar: '"'
+
+test_pharmacy_data_germany_all_sales.extract:
+  type: pandas.CSVDataSet
+  filepath: ${globals:BUCKET_NAME}/data/01_raw/test_pharmacy_data_germany_all_sales.csv
+
+test_pharmacy_data_germany_agreggated.extract:
+  type: pandas.CSVDataSet
+  filepath: ${globals:BUCKET_NAME}/data/01_raw/test_pharmacy_data_germany_agreggated_corrected.csv
+  
+German_GP_Diagnoses:
+  type: pandas.CSVDataSet
+  filepath: ${globals:BUCKET_NAME}/data/02_intermediate/Diagnoses.csv
+
+German_GP_Prescriptions:
+  type: pandas.CSVDataSet
+  filepath: ${globals:BUCKET_NAME}/data/02_intermediate/Prescriptions.csv
+
+German_Pharmacy_Sells:
+  type: pandas.CSVDataSet
+  filepath: ${globals:BUCKET_NAME}/data/02_intermediate/Pharmacy_Sells.csv
+
+processed_German_GP_Diagnoses:
+  type: pandas.CSVDataSet
+  filepath: ${globals:BUCKET_NAME}/data/05_model_input/Diagnoses.csv
+
+processed_German_GP_Prescriptions:
+  type: pandas.CSVDataSet
+  filepath: ${globals:BUCKET_NAME}/data/05_model_input/Prescriptions.csv
+
+processed_German_Pharmacy_Sells:
+  type: pandas.CSVDataSet
+  filepath: ${globals:BUCKET_NAME}/data/05_model_input/Pharmacy_Sells.csv
+
+processed_German_GP_Diagnoses_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Diagnoses'  
+
+processed_German_GP_Prescriptions_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Prescriptions'  
+
+processed_German_Pharmacy_Sells_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_Pharmacy' 
+  collection: 'German_Pharmacy_Sells' 
+
+German_GP_Alert_Diagnoses:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Alert_Diagnoses'  
+
+German_GP_Alert_Prescriptions:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Alert_Prescriptions'  
+
+German_Pharmacy_Alert_Sells:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_Pharmacy' 
+  collection: 'German_Pharmacy_Alert_Sells' 
+

@@ -1,0 +1,2 @@
+PHARMACY_DATA_PATH: sftp://193.218.11.199/upload/Test_Data/pharmacy_data_germany
+GP_DATA_PATH: sftp://193.218.11.199/upload/Test_Data/gp_data

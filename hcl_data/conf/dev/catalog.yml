@@ -1,0 +1,68 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+
+###############
+#### PATHS ####
+
+HCL_data:
+  type: hcl_model_project.extras.datasets.dynamic_excel.SFTPExcelLoader
+  filepath: ${globals:HCL_DATA_PATH}/
+  credentials: cgm_credentials
+
+HCL_update_SEM:
+  type: hcl_model_project.extras.datasets.dynamic_excel_rss_update_SEM.SFTPExcelLoader
+  filepath: ${globals:HCL_DATA_PATH}/
+  credentials: cgm_credentials
+
+HCL_ER_historical:
+  type: hcl_model_project.extras.datasets.dynamic_excel_ER.SFTPExcelLoader
+  filepath: ${globals:HCL_DATA_PATH}/
+  credentials: cgm_credentials
+
+
+######### MONGODB ##########
+
+# HCL lab Mongodb
+
+hcl_lab_baseline_final:
+  type: hcl_model_project.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'HCL_preprocessing'  # Your MongoDB database name
+  collection: 'hcl_lab_baseline_final'  # Your MongoDB collection name
+
+hcl_lab_fraction_final:
+  type: hcl_model_project.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'HCL_preprocessing'  # Your MongoDB database name
+  collection: 'hcl_lab_fraction_final'  # Your MongoDB collection name
+
+
+# HCL RSS Mongodb
+
+table_I_final:
+  type: hcl_model_project.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'HCL_preprocessing'  # Your MongoDB database name
+  collection: 'table_I_final'  # Your MongoDB collection name
+
+table_II_final:
+  type: hcl_model_project.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'HCL_preprocessing'  # Your MongoDB database name
+  collection: 'table_II_final'  # Your MongoDB collection name
+
+table_III_final:
+  type: hcl_model_project.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'HCL_preprocessing'  # Your MongoDB database name
+  collection: 'table_III_final'  # Your MongoDB collection name
+
+# HCL ER Mongodb
+
+HCL_ER_final:
+  type: hcl_model_project.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'HCL_preprocessing'  # Your MongoDB database name
+  collection: 'HCL_ER_final'  # Your MongoDB collection name

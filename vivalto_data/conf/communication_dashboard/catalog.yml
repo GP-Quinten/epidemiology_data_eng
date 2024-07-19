@@ -1,0 +1,138 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+
+
+
+vivalto_data:
+  type: vivalto_data.extras.datasets.dynamic_excel_vivalto.SFTPExcelLoader
+  filepath: ${globals:VIVALTO_DATA_PATH}/
+  credentials: cgm_credentials
+
+######### SFTP outputs ##########
+
+table_I_final_vivalto:
+  type: vivalto_data.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Vivalto_preprocessing/table_I_final_vivalto.csv
+  credentials : communication_dashboard_credentials
+
+table_II_final_vivalto:
+  type: vivalto_data.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Vivalto_preprocessing/table_II_final_vivalto.csv
+  credentials : communication_dashboard_credentials
+
+table_III_final_vivalto:
+  type: vivalto_data.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:COMMUNICATION_DASHBOARD}/Vivalto_preprocessing/table_III_final_vivalto.csv
+  credentials : communication_dashboard_credentials
+
+######### LOCAL ##########
+
+## EXTRACTS ##
+df_number_of_id_vivalto:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/df_number_of_id_vivalto.csv
+
+df_death_vivalto:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/df_death_vivalto.csv
+
+df_critical_health_vivalto:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/df_critical_health_vivalto.csv
+
+## INTERMEDIATE DATA ##
+table_I_missing_data:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/table_I_missing_data.csv
+
+table_II_missing_data:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/table_II_missing_data.csv
+
+table_III_missing_data:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/table_III_missing_data.csv
+
+
+## OUTPUTS ##
+table_I_final_vivalto.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/table_I_final.csv
+  load_args:
+    sep: ';' 
+
+table_II_final_vivalto.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/table_II_final.csv
+  load_args:
+    sep: ';' 
+
+table_III_final_vivalto.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/table_III_final.csv
+  load_args:
+    sep: ';' 
+
+## VIVALTO LOCAL
+
+# table_I_missing_data:
+#   type: pandas.CSVDataSet
+#   filepath: data/04_feature/table_I_missing_data.csv
+
+# table_II_final_vivalto:
+#   type: pandas.CSVDataSet
+#   filepath: data/04_feature/table_II_final_vivalto.csv
+
+# table_III_final_vivalto:
+#   type: pandas.CSVDataSet
+#   filepath: data/04_feature/table_III_final_vivalto.csv
+
+
+# df_number_of_id_vivalto_translate:
+#   type: pandas.CSVDataSet
+#   filepath: data/04_feature/df_number_of_id_vivalto_translate.csv
+
+
+# table_II_missing_data:
+#   type: pandas.CSVDataSet
+#   filepath: data/04_feature/table_II_missing_data.csv
+
+# table_I_final_vivalto:
+#   type: pandas.CSVDataSet
+#   filepath: data/04_feature/table_I_final_vivalto.csv
+
+# table_II_final_vivalto:
+#   type: pandas.CSVDataSet
+#   filepath: data/04_feature/table_II_final_vivalto.csv
+
+# table_III_final_vivalto:
+#   type: pandas.CSVDataSet
+#   filepath: data/04_feature/table_III_final_vivalto.csv
+
+table_I_baseline:
+  type: pandas.CSVDataSet
+  filepath: data/04_feature/table_I_baseline.csv
+
+table_II_baseline:
+  type: pandas.CSVDataSet
+  filepath: data/04_feature/table_II_baseline.csv
+
+table_III_baseline:
+  type: pandas.CSVDataSet
+  filepath: data/04_feature/table_III_baseline.csv
+
+## nowcasting ##
+
+table_I_nowcasting:
+  type: pandas.CSVDataSet
+  filepath: data/04_feature/table_I_nowcasting.csv
+
+table_II_nowcasting:
+  type: pandas.CSVDataSet
+  filepath: data/04_feature/table_II_nowcasting.csv
+
+table_III_nowcasting:
+  type: pandas.CSVDataSet
+  filepath: data/04_feature/table_III_nowcasting.csv

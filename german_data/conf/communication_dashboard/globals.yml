@@ -1,0 +1,3 @@
+PHARMACY_DATA_PATH: sftp://193.218.11.199/upload/Test2/pharmacy_data_germany
+GP_DATA_PATH: sftp://193.218.11.199/upload/Test_Data/gp_data
+COMMUNICATION_DASHBOARD: sftp://aiolossftp@sftp.aiolos-project.org/var/www/clients/client17/web73/home/aiolossftp/DATA

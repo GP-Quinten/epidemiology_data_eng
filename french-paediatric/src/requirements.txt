@@ -1,0 +1,27 @@
+aiohttp
+black~=22.0
+covasim==3.1.4
+flake8>=3.7.9, <5.0
+ipykernel
+ipython>=7.31.1, <8.0; python_version < '3.8'
+ipython~=8.10; python_version >= '3.8'
+isort~=5.0
+jupyter~=1.0
+jupyterlab_server>=2.11.1, <2.16.0
+jupyterlab~=3.0, <3.6.0
+kedro~=0.18.11
+kedro-telemetry~=0.2.0
+kedro-viz
+kedro-datasets==1.4.2
+nbstripout~=0.4
+pandas==2.0.3
+pandera==0.16.1
+pymongo==4.5.0
+pytest-cov~=3.0
+pytest-mock>=1.7.1, <2.0
+pytest~=7.2
+requests
+setuptools==67.8.0
+statsmodels == 0.14.0
+s3fs
+paramiko

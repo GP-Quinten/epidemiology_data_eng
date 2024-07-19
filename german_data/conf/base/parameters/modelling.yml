@@ -1,0 +1,21 @@
+time_dim_influenza: 'weekly'
+time_dim_google: "daily-alert"
+time_dim_covid: "daily-alert"
+time_dim_cgm : 'weekly'
+time_dim_rsv : 'weekly'
+
+time_dim_covid_forecast: "daily"
+time_dim_influenza_forecast: "weekly"
+time_dim_rsv_forecast: "weekly"
+
+size_FW_daily: 7 #Fitting Window Size with daily data
+size_FW_weekly: 5 #Fitting Window Size with weekly data
+size_FW_daily_alert : 35 #Fitting Window Size with daily data in alert 5 weeks as well for consistency.
+
+size_PW_weekly : 2 #Prediction Window Size
+size_PW_daily : 14 #Prediction Window Size
+
+age_strat_true : True
+age_strat_false : False
+
+numeric_cols: []

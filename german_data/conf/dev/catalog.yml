@@ -1,0 +1,794 @@
+#####################################################################################################
+#####################################################################################################
+
+
+
+#############################################################
+########################## CGM PHARMA #######################
+
+## SOURCES ##
+diagnoses_cgm_past.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:GP_DATA_PATH}/CGM_diagnoses_extract_2023-01_2024-11.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ","
+      encoding: latin1
+      quotechar: '"'
+
+diagnoses_cgm_latest_weeks.source:
+  type: gp_germany.extras.datasets.dynamic_excel_diag.SFTPExcelLoader 
+  filepath: ${globals:GP_DATA_PATH}/
+  credentials : cgm_credentials
+  load_args:
+      sep: ","
+      encoding: latin1
+      quotechar: '"'
+
+prescriptions_cgm_past.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:GP_DATA_PATH}/CGM_prescriptions_extract_2023-01_2024-07.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ","
+      encoding: latin1
+      quotechar: '"'
+
+prescriptions_cgm_latest_weeks.source:
+  type: gp_germany.extras.datasets.dynamic_excel_diag.SFTPExcelLoader 
+  filepath: ${globals:GP_DATA_PATH}/
+  credentials : cgm_credentials
+  load_args:
+      sep: ","
+      encoding: latin1
+      quotechar: '"'
+
+pharmacy_data_germany.source:
+  type: gp_germany.extras.datasets.sftp_dataset.SFTPDataSet 
+  filepath: ${globals:PHARMACY_DATA_PATH}/pharmacy_data_germany_2019_Jan2024.csv
+  credentials : cgm_credentials
+  load_args:
+      sep: ";"
+      encoding: latin1
+      quotechar: '"'
+
+## EXTRACTS ##
+diagnoses_cgm.extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/CGM_diagnoses_extract.csv
+
+prescriptions_cgm.extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/CGM_prescriptions_extract.csv
+
+pharmacy_data_germany.extract:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/pharmacy_data_germany_extract.csv
+  
+## INTERMEDIATE DATA ##
+German_GP_Diagnoses:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Diagnoses.csv
+
+German_GP_Prescriptions:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Prescriptions.csv
+
+German_Pharmacy_Sales:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Pharmacy_Sales.csv
+
+German_GP_Diagnoses_rel:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Diagnoses_rel.csv
+
+German_GP_Prescriptions_rel:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Prescriptions_rel.csv
+
+German_Pharmacy_Sales_rel:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Pharmacy_Sales_rel.csv
+
+
+## MODEL INPUTS ##
+processed_German_GP_Diagnoses:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/processed_Diagnoses.csv
+
+processed_German_GP_Prescriptions:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/processed_Prescriptions.csv
+
+processed_German_Pharmacy_Sales:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/processed_Pharmacy_Sales.csv
+
+processed_German_GP_Diagnoses_rel:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/processed_Diagnoses_rel.csv
+
+processed_German_GP_Prescriptions_rel:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/processed_Prescriptions_rel.csv
+
+processed_German_Pharmacy_Sales_rel:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/processed_Pharmacy_Sales_rel.csv
+
+
+## PREPROCESSING OUTPUT ##
+processed_German_GP_Diagnoses_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Diagnoses'  
+
+processed_German_GP_Prescriptions_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Prescriptions'  
+
+processed_German_Pharmacy_Sales_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_Pharmacy' 
+  collection: 'German_Pharmacy_Sales' 
+
+processed_German_GP_Diagnoses_rel_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Diagnoses_rel'  
+
+processed_German_GP_Prescriptions_rel_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Prescriptions_rel'  
+
+processed_German_Pharmacy_Sales_rel_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_Pharmacy' 
+  collection: 'German_Pharmacy_Sales_rel' 
+
+
+## ALERTS OUPUTS ##
+German_GP_Alert_Diagnoses:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Diagnoses_Alert'  
+
+German_GP_Alert_Prescriptions:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Prescriptions_Alert'  
+
+German_Pharmacy_Alert_Sales:
+ type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+ credentials : mongo_credentials
+ database: 'German_Pharmacy' 
+ collection: 'German_Pharmacy_Sales_Alert' 
+
+German_GP_Alert_Diagnoses_rel:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Diagnoses_rel_Alert'  
+
+German_GP_Alert_Prescriptions_rel:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'German_GP' 
+  collection: 'German_GP_Prescriptions_rel_Alert'  
+
+German_Pharmacy_Alert_Sales_rel:
+ type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+ credentials : mongo_credentials
+ database: 'German_Pharmacy' 
+ collection: 'German_Pharmacy_Sales_rel_Alert'
+
+
+
+
+
+#####################################################################################################
+#####################################################################################################
+
+
+
+###################################################
+##################### COVID #######################
+
+## SOURCES ## 
+RKI_full_data.source:
+  type: pandas.CSVDataSet
+  filepath: https://media.githubusercontent.com/media/robert-koch-institut/SARS-CoV-2-Infektionen_in_Deutschland/main/Aktuell_Deutschland_SarsCov2_Infektionen.csv
+  
+Hospitalization_ger.source:
+  type: pandas.CSVDataSet
+  filepath: https://raw.githubusercontent.com/robert-koch-institut/COVID-19-Hospitalisierungen_in_Deutschland/master/Aktuell_Deutschland_COVID-19-Hospitalisierungen.csv
+
+## EXTRACTS ##
+RKI_full_data.extract:
+   type: pandas.CSVDataSet
+   filepath: data/01_raw/RKI_full_data_covid.csv
+
+Hospitalization_ger.extract:
+   type: pandas.CSVDataSet
+   filepath: data/01_raw/Hospitalization_covid_ger.csv
+
+## INTERMEDIATE DATA ## 
+COVID_cases:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/COVID_cases.csv
+
+COVID_deaths:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/COVID_deaths.csv
+
+COVID_hosp:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/COVID_hosp.csv
+
+COVID_cases_weekly:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/COVID_cases_weekly.csv
+
+COVID_deaths_weekly:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/COVID_deaths_weekly.csv
+
+COVID_hosp_weekly:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/COVID_hosp_weekly.csv
+
+
+## MODEL INPUT ##
+COVID_cases_processing:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/COVID_cases_processing.csv
+
+COVID_deaths_processing:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/COVID_deaths_processing.csv
+
+COVID_hosp_processing:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/COVID_hosp_processing.csv
+
+COVID_cases_processing_forecast:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/COVID_cases_processing_forecast.csv
+
+COVID_deaths_processing_forecast:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/COVID_deaths_processing_forecast.csv
+
+COVID_hosp_processing_forecast:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/COVID_hosp_processing_forecast.csv
+
+## PREPROCESSING OUTPUT ##
+COVID_cases_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'COVID_cases'
+
+COVID_deaths_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA'
+  collection: 'COVID_deaths'
+
+COVID_hosp_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'COVID_hosp'
+
+
+## ALERTS OUPUTS ##
+Alert_COVID_cases:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'COVID_cases_Alert'
+
+Alert_COVID_deaths:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA'
+  collection: 'COVID_deaths_Alert'
+
+Alert_COVID_hosp:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'COVID_hosp_Alert'
+
+## FORECAST OUPUTS ##
+Forecast_COVID_cases:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA'
+  collection: 'COVID_cases_Forecast'
+
+Forecast_COVID_deaths:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'COVID_deaths_Forecast'
+
+Forecast_COVID_hosp:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'COVID_hosp_Forecast'
+
+
+
+#####################################################################################################
+#####################################################################################################
+
+
+###################################################
+###################### GOOGLE #####################
+
+## SOURCES ##
+
+## EXTRACTS ##
+symptoms:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/resp_symptoms.csv
+
+## INTERMEDIATE DATA ##
+Google_symptoms_fr:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Google_symptoms_fr.csv
+
+Google_symptoms_de:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Google_symptoms_de.csv
+
+## MODEL INPUT ##
+google_symptoms_fr_processing:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/google_symptoms_fr_processing.csv
+
+google_symptoms_de_processing:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/google_symptoms_de_processing.csv
+
+## PREPROCESSING OUTPUT ##
+Google_symptoms_fr_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'Google_trends' 
+  collection: 'Google_symptoms_fr'
+
+Google_symptoms_de_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'Google_trends' 
+  collection: 'Google_symptoms_de'
+
+## ALERTS OUPUTS ##
+Alert_Google_symptoms_fr:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'Google_trends' 
+  collection: 'Google_Alert_FR'
+
+Alert_Google_symptoms_de:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'Google_trends' 
+  collection: 'Google_Alert_DE'
+
+#####################################################################################################
+#####################################################################################################
+
+
+
+#################################################
+###################### INFLUENZA ################
+
+## SOURCES ##
+
+## EXTRACTS ##
+Influenza_cases_BB:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_BB.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_BE:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_BE.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_BW:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_BW.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_BY:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_BY.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_DE:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_DE.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_HB:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_HB.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_HE:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_HE.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_HH:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_HH.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_MV:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_MV.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_NI:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_NI.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_NW:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_NW.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_RP:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_RP.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_SH:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_SH.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_SL:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_SL.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_SN:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_SN.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_ST:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_ST.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+Influenza_cases_TH:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/Influenza_cases_TH.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+## INTERMEDIATE DATA ## 
+
+Influenza_cases:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/Influenza_cases.csv
+
+Influenza_cases_processing:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/Influenza_cases_processing.csv
+
+Influenza_cases_processing_forecast : 
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/Influenza_cases_processing_forecast.csv
+
+## PREPROCESSING OUTPUT ##
+Influenza_cases_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'Influenza_cases'
+
+## ALERTS OUPUTS ##
+Alert_Influenza_cases:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'Influenza_cases_Alert'
+
+## FORECAST OUPUTS ##
+Forecast_Influenza_cases:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'Influenza_cases_Forecast'
+
+#####################################################################################################
+#####################################################################################################
+
+
+
+#################################################
+#################### RSV ########################
+
+## SOURCES ##
+
+## EXTRACTS ##
+RSV_cases_SN:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/local/RSV_cases_SN.csv
+  load_args:
+    encoding: 'utf-16le'
+    sep: '\t'
+    lineterminator: '\n'
+    skiprows: 1
+    index_col: 0
+  save_args:
+    index: False
+
+## INTERMEDIATE DATA ## 
+RSV_cases:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/RSV_cases.csv
+
+RSV_cases_processing:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/RSV_cases_processing.csv
+
+RSV_cases_processing_forecast : 
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/RSV_cases_processing_forecast.csv
+
+## PREPROCESSING OUTPUTS ##
+RSV_cases_MongoDB:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'RSV_cases'
+
+## ALERTS OUTPUTS ##
+Alert_RSV_cases:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'RSV_cases_Alert'
+
+
+## FORECAST OUTPUTS ##
+Forecast_RSV_cases:
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'RSV_cases_Forecast'
+
+
+#####################################################################################################
+#####################################################################################################
+
+
+#################################################
+################## SARI HOSPIT ##################
+
+## SOURCES ## 
+SARI_hospit.source:
+  type: pandas.CSVDataSet
+  filepath: https://raw.githubusercontent.com/robert-koch-institut/SARI-Hospitalisierungsinzidenz/main/SARI-Hospitalisierungsinzidenz.tsv
+
+## EXTRACTS ##
+SARI_hospit.extract:
+   type: pandas.CSVDataSet
+   filepath: data/01_raw/SARI-Hospit_extract.csv
+   load_args:
+    sep: '\t'
+
+## INTERMEDIATE DATA ##
+SARI_hospit_preprocessed:
+   type: pandas.CSVDataSet
+   filepath: data/02_intermediate/SARI_hospit_preprocessed.csv
+
+## MODEL INPUTS ##
+SARI_hospit_processing:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/SARI_hospit_processing.csv
+
+SARI_hospit_processing_forecast:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/SARI_hospit_processing_forecast.csv
+
+## PREPROCESSING OUTPUT ##
+SARI_hospit_preprocessed_MongoDB: 
+  type: gp_germany.extras.datasets.mongodb_dataset.MongoDBDataSet
+  credentials : mongo_credentials
+  database: 'RKI_DATA' 
+  collection: 'SARI_hospit_preprocessed'
+
+#####################################################################################################
+#####################################################################################################
+
+
+######################################
+#### ADDITIONAL LOCAL OUTPUT SAVE ####
+
+## ALERTS ##
+German_GP_Alert_Diagnoses.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/German_GP_Alert_Diagnoses.csv
+
+German_GP_Alert_Prescriptions.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/German_GP_Alert_Prescriptions.csv
+
+German_Pharmacy_Alert_Sales.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/German_Pharmacy_Alert_Sales.csv
+
+German_GP_Alert_Sales_rel.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/German_GP_Alert_Diagnoses_rel.csv
+
+Alert_Google_symptoms_fr.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_Google_symptoms_fr.csv
+
+Alert_Google_symptoms_de.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_Google_symptoms_de.csv
+
+Alert_COVID_cases.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_COVID_cases.csv
+
+Alert_COVID_deaths.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_COVID_deaths.csv
+
+Alert_COVID_hosp.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_COVID_hosp.csv
+
+Alert_Influenza_cases.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_Influenza_cases.csv
+
+Alert_RSV_cases.local:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/alert/Alert_RSV_cases.csv
+
